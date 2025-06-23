@@ -1,8 +1,10 @@
-[build]
-  publish = "."
-  command = "echo 'No build needed'"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Service-Worker-Allowed = "/"
