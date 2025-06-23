@@ -1,32 +1,11 @@
 {
   "name": "woodwizard-pro",
   "version": "1.0.0",
-  "description": "Professional woodworking optimization tool",
-  "main": "main.js",
+  "description": "Professional Woodworking Tool",
   "scripts": {
-    "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "start": "serve -s"
   },
-  "author": "Your Name",
-  "license": "ISC",
-  "devDependencies": {
-    "electron": "^25.0.0"
-  },
-  "build": {
-    "appId": "com.woodwizard.pro",
-    "productName": "WoodWizard Pro",
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.png"
-    },
-    "mac": {
-      "category": "public.app-category.utilities",
-      "icon": "build/icon.png"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "build/icon.png"
-    }
+  "dependencies": {
+    "serve": "^14.0.1"
   }
 }
