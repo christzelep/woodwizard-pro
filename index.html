@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2c786c">
     <title>WoodWizard Pro - Professional Woodworking Tool</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <style>
         :root {
             --primary: #2c786c;
@@ -234,9 +238,46 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Προσθήκη στυλ για εγκατάσταση PWA */
+        .install-button {
+            background-color: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .install-button:hover {
+            background-color: #e0a800;
+        }
+        
+        .offline-message {
+            background: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <div class="offline-message" id="offlineMessage">⚠️ Λειτουργείτε εκτός σύνδεσης. Ορισμένες λειτουργίες μπορεί να μην είναι διαθέσιμες.</div>
+    
     <header>
         <div class="container header-content">
             <div class="logo">
@@ -437,7 +478,60 @@
         </div>
     </footer>
 
+    <button class="install-button" id="installButton">Εγκατάσταση Εφαρμογής</button>
+
     <script>
+        // ============= PWA Functionality =============
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered: ', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed: ', error);
+                    });
+            });
+        }
+
+        // App Installation
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'block';
+        });
+
+        installButton.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted installation');
+                    }
+                    deferredPrompt = null;
+                    installButton.style.display = 'none';
+                });
+            }
+        });
+
+        // Network Status Detection
+        window.addEventListener('online', () => {
+            document.getElementById('offlineMessage').style.display = 'none';
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offlineMessage').style.display = 'block';
+        });
+
+        if (!navigator.onLine) {
+            document.getElementById('offlineMessage').style.display = 'block';
+        }
+
+        // ============= Existing App Functionality =============
         // Tab Switching
         document.querySelectorAll('nav a').forEach(tab => {
             tab.addEventListener('click', (e) => {
