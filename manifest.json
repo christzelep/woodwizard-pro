@@ -2,10 +2,11 @@
   "name": "WoodWizard Pro",
   "short_name": "WoodWizard",
   "start_url": "index.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#2c786c",
   "theme_color": "#2c786c",
-  "description": "Επαγγελματικό εργαλείο ξυλουργικής για βέλτιστο κόψιμο και συνδέσεις",
+  "description": "Professional woodworking tool for optimal cutting and joinery",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
